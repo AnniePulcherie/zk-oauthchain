@@ -1,6 +1,6 @@
 # ZK-OAuthChain -- resultats experimentaux
 
-Genere le 2026-09-16T07:05:07.876Z.
+Genere le 2026-09-16T07:26:53.923Z.
 
 **Environnement.** 13th Gen Intel(R) Core(TM) i5-13420H, 12 coeurs, 16.8 Go, Windows_NT 10.0.26200, Node v24.15.0. Chaine : localhost (chainId 31337). 40 autorisations mesurees ; 200 flux OAuth 2.0 mesures.
 
@@ -60,13 +60,13 @@ etendu n'est incluse, de part et d'autre.
 
 ## Tableau 5 -- Positionnement face a l'etat de l'art 2025-2026
 
-| Travail | Systeme | Outillage | Contraintes | Preuve | Verification | Taille preuve | Gas verif. |
+| Travail | Systeme (setup) | Outillage | Contraintes | Preuve | Verification | Taille preuve | Gas verif. |
 |---|---|---|---:|---:|---:|---:|---:|
-| zkAt (Groth16) | Groth16 | Go / gnark (natif) | 24 564 | 50,97 ms | 0,89 ms | 256 o* | n. r. |
-| ZK-ACE (Groth16) | Groth16 | Rust / arkworks (natif, mono-fil) | 4 024 | 63,00 ms | 0,65 ms | 256 o* | n. r. |
-| Cadre DID/VC (zk-STARK) | zk-STARK (sans setup de confiance) | Cairo / chaine StarkWare | n. r. | 3,50 s | 5,00 ms | 45 Ko | 280 000 |
-| LinkDID (zk-SNARK) | zk-SNARK | non precise | n. r. | 5,00 s | 3,00 ms | 1 Ko | 210 000 |
-| **ZK-OAuthChain (ce travail)** | **Groth16** | **JS / snarkjs (WebAssembly)** | **25 383** | **1,53 s** | **26,96 ms** | **256 o** | **238 785** |
+| zkAt (Groth16) | Groth16 — setup par circuit | Go / gnark (natif) | 24 564 | 50,97 ms | 0,89 ms | 256 o* | n. r. |
+| ZK-ACE (Groth16) | Groth16 — setup par circuit | Rust / arkworks (natif, mono-fil) | 4 024 | 63,00 ms | 0,65 ms | 256 o* | n. r. |
+| Cadre DID/VC (zk-STARK) | zk-STARK — transparent, aucun setup | Cairo / chaine StarkWare | n. r. | 3,50 s | 5,00 ms | 45 Ko | 280 000 |
+| LinkDID (zk-SNARK) | zk-SNARK — setup requis | non precise | n. r. | 5,00 s | 3,00 ms | 1 Ko | 210 000 |
+| **ZK-OAuthChain (ce travail)** | **Groth16 -- setup par circuit** | **JS / snarkjs (WebAssembly)** | **25 383** | **1,53 s** | **26,96 ms** | **256 o** | **238 785** |
 
 `n. r.` : non rapporte par les auteurs. `*` : taille non rapportee, valeur structurelle
 de Groth16 sur BN254. Les temps de preuve et de verification sont les medianes ;
@@ -90,8 +90,8 @@ ni preuve d'exclusion, d'ou un facteur 6,3 sur le nombre de contraintes.
 
 | Outil | Objet | Resultat |
 |---|---|---|
-| ProB 1.16.1 (Methode B) | modele naif (pseudo-code Section 3.4.b) | **contre-exemple trouve** en 8 etapes : `!u.(u : dom(commitments) => commitments(u) /: revoked)` |
-| ProB 1.16.1 (Methode B) | modele durci (contrat deploye) | **aucun contre-exemple**, 8 600 etats et 48 379 transitions entierement explores (7500 ms) |
+| ProB 1.16.1 (Methode B) | modele naif (pseudo-code Section 3.4.b) | **contre-exemple trouve** en 4 etapes : `!u.(u : dom(commitments) => commitments(u) /: revoked)` |
+| ProB 1.16.1 (Methode B) | modele durci (contrat deploye) | **aucun contre-exemple**, 8 600 etats et 48 379 transitions entierement explores (7000 ms) |
 | SMTChecker CHC + z3 | `commitmentOf[u] == 0 || holderOf[commitmentOf[u]] == u` | indetermine (limite de l'outil) |
 | SMTChecker CHC + z3 | `commitmentOf[u] == 0 || !revoked[commitmentOf[u]]` | indetermine (limite de l'outil) |
 | SMTChecker CHC + z3 | `holderOf[c] == address(0) || !revoked[c]` | **prouve sur** |
@@ -103,11 +103,7 @@ ni preuve d'exclusion, d'ou un facteur 6,3 sur le nombre de contraintes.
 
 ```
   INITIALISATION(commitments={},epoch=0,granted={},revoked={},used={})
-  registerCommitment(u2,c1)
-  registerCommitment(u3,c2)
-  revokeCommitment(u3)
-  registerCommitment(u3,c3)
-  revokeCommitment(u3)
+  registerCommitment(u1,c1)
   registerCommitment(u3,c1)
   revokeCommitment(u3)
 ```

@@ -3,7 +3,8 @@
     "Chiffres extraits des publications de reference, avec leur provenance exacte.",
     "Toute valeur non rapportee par les auteurs est marquee null et signalee comme telle :",
     "aucune valeur n'est estimee ou extrapolee sans le dire.",
-    "Ces donnees alimentent le tableau comparatif de la Section 6 via bench/compare.mjs."
+    "Ces donnees alimentent le tableau comparatif de la Section 6 via bench/compare.mjs.",
+    "setupDeConfiance et postQuantique alignent le tableau sur le format de Hui Yuan, dont la comparaison SOTA comporte une colonne « Trusted Setup Required ? »."
   ],
   "travaux": [
     {
@@ -20,7 +21,9 @@
       "taillePreuveOctets": 256,
       "taillePreuveRapportee": false,
       "gasVerification": null,
-      "remarque": "Taille de preuve non rapportee par les auteurs : 256 o est la valeur structurelle de Groth16 sur BN254. Comparable a ce travail par la taille de circuit (24 564 vs 25 383 contraintes)."
+      "remarque": "Taille de preuve non rapportee par les auteurs : 256 o est la valeur structurelle de Groth16 sur BN254. Comparable a ce travail par la taille de circuit (24 564 vs 25 383 contraintes).",
+      "setupDeConfiance": "Groth16 — setup par circuit",
+      "postQuantique": "Non : courbe à couplages BN254"
     },
     {
       "cle": "zkace",
@@ -36,7 +39,9 @@
       "taillePreuveOctets": 256,
       "taillePreuveRapportee": false,
       "gasVerification": null,
-      "remarque": "Circuit 6,3 fois plus petit que celui de ce travail : pas d'appartenance Merkle ni de preuve d'exclusion. Cout on-chain non mesure (analyse structurelle de volumetrie uniquement)."
+      "remarque": "Circuit 6,3 fois plus petit que celui de ce travail : pas d'appartenance Merkle ni de preuve d'exclusion. Cout on-chain non mesure (analyse structurelle de volumetrie uniquement).",
+      "setupDeConfiance": "Groth16 — setup par circuit",
+      "postQuantique": "Non au niveau de la preuve, malgré une motivation post-quantique ; les auteurs déclarent leur construction agnostique au système de preuve et désignent les STARK comme option transparente et plausiblement post-quantique"
     },
     {
       "cle": "stark",
@@ -53,7 +58,9 @@
       "taillePreuveRapportee": true,
       "gasVerification": 280000,
       "gasAncrageRacines": 45000,
-      "remarque": "Les 45 000 gas frequemment cites correspondent a la mise a jour de l'accumulateur de revocation par l'emetteur, et non a la verification d'une preuve : le tableau comparatif des auteurs chiffre celle-ci a environ 280 000 gas."
+      "remarque": "Les 45 000 gas frequemment cites correspondent a la mise a jour de l'accumulateur de revocation par l'emetteur, et non a la verification d'une preuve : le tableau comparatif des auteurs chiffre celle-ci a environ 280 000 gas.",
+      "setupDeConfiance": "zk-STARK — transparent, aucun setup",
+      "postQuantique": "Plausiblement oui : construction fondée sur des fonctions de hachage"
     },
     {
       "cle": "linkdid",
@@ -69,7 +76,9 @@
       "taillePreuveOctets": 1024,
       "taillePreuveRapportee": true,
       "gasVerification": 210000,
-      "remarque": "Taille de preuve rapportee comme inferieure a 1 Ko ; valeur portee a 1 024 o comme borne superieure."
+      "remarque": "Taille de preuve rapportee comme inferieure a 1 Ko ; valeur portee a 1 024 o comme borne superieure.",
+      "setupDeConfiance": "zk-SNARK — setup requis",
+      "postQuantique": "Non"
     }
   ]
 }

@@ -118,16 +118,17 @@ const ko = (o) => o == null ? "n. r." : (o >= 1024 ? f(o / 1024, 0) + " Ko" : o 
 const ms = (x) => x == null ? "n. r." : (x >= 1000 ? f(x / 1000, 2) + " s" : f(x, 2) + " ms");
 
 push("## Tableau 5 -- Positionnement face a l'etat de l'art 2025-2026", "");
-push("| Travail | Systeme | Outillage | Contraintes | Preuve | Verification | Taille preuve | Gas verif. |",
+push("| Travail | Systeme (setup) | Outillage | Contraintes | Preuve | Verification | Taille preuve | Gas verif. |",
      "|---|---|---|---:|---:|---:|---:|---:|");
 for (const t of sota.travaux) {
-  push("| " + t.nom + " | " + t.systemeDePreuve.split(",")[0] + " | " + t.outillage + " | " +
+  push("| " + t.nom + " | " + t.setupDeConfiance + " | " + t.outillage + " | " +
        (t.contraintes == null ? "n. r." : g(t.contraintes)) + " | " + ms(t.preuveMs) + " | " +
        ms(t.verificationMs) + " | " + ko(t.taillePreuveOctets) +
        (t.taillePreuveRapportee ? "" : "*") + " | " +
        (t.gasVerification == null ? "n. r." : g(t.gasVerification)) + " |");
 }
-push("| **ZK-OAuthChain (ce travail)** | **Groth16** | **JS / snarkjs (WebAssembly)** | **" +
+push("| **ZK-OAuthChain (ce travail)** | **Groth16 -- setup par circuit** | " +
+     "**JS / snarkjs (WebAssembly)** | **" +
      g(zk.circuit.contraintes) + "** | **" + ms(zk.temps.preuveGroth16Seule.mediane) + "** | **" +
      ms(zk.temps.verificationHorsChaine.mediane) + "** | **" + ko(zk.tailles.preuveGroth16Octets) +
      "** | **" + g(zk.gas.verificationPreuveSeule.moyenne) + "** |", "");

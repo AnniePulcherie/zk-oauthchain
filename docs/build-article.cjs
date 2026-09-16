@@ -309,12 +309,29 @@ A(P("Les preuves à connaissance nulle (Goldwasser et al., 1989) [5] permettent 
 
 A(H("2.4. Vérification formelle des contrats intelligents", 2));
 A(P("Les contrats intelligents sont immuables une fois déployés : une erreur de logique peut " +
-    "être fatale (Bhargavan et al., 2021) [3]. La revue systématique de Davila et al. (2025) " +
-    "[14] recense les outils et méthodes du domaine et souligne la faible proportion de " +
-    "travaux rapportant des résultats de vérification effectivement obtenus, par opposition à " +
-    "la seule description d'une méthode. La vérification formelle applique des méthodes " +
-    "mathématiques pour démontrer la conformité d'un code à sa spécification ; sa portée reste " +
-    "bornée par le modèle considéré et par la complétude de l'outil employé."));
+    "être fatale (Bhargavan et al., 2021) [3]. La vérification formelle applique des méthodes " +
+    "mathématiques pour démontrer la conformité d'un système à sa spécification ; sa portée " +
+    "reste bornée par le modèle considéré et par la complétude de l'outil employé."));
+A(PR([
+  ["Un manque reconnu : la vérification de la conception, et non du seul code. ", { bold: true }],
+  ["La revue systématique de Davila et al. (2025) [14], qui couvre la littérature du domaine, " +
+   "établit deux constats convergents. D'une part, l'essentiel des travaux porte sur la " +
+   "vérification de l'implémentation et de l'exécution des contrats, et les auteurs " +
+   "identifient explicitement le besoin de vérifier leur conception comme un axe insuffisamment " +
+   "traité — ils le désignent en conclusion comme « une opportunité à explorer ». D'autre part, " +
+   "le model-checking y apparaît comme la méthode la plus répandue pour établir les propriétés " +
+   "d'un contrat, en particulier durant la phase de développement, c'est-à-dire avant " +
+   "déploiement, là où une correction reste possible.", {}],
+]));
+A(P("Ce diagnostic situe directement notre démarche. La Section 5 établit les invariants sur " +
+    "une spécification en Méthode B — donc sur la conception, indépendamment du langage " +
+    "d'implémentation — avant de les confronter au code Solidity ; et elle le fait par " +
+    "model-checking exhaustif, la méthode que Davila et al. identifient comme dominante pour " +
+    "cet usage. Là où ces auteurs proposent la logique de description pour combler le manque, " +
+    "nous employons la Méthode B ; l'objet visé est le même. Le Résultat 1 de la Section 5.2 " +
+    "montre concrètement ce que la vérification au niveau de la conception permet de capturer : " +
+    "un défaut présent dans la spécification elle-même, qu'aucune analyse du code déployé " +
+    "n'aurait signalé puisqu'il aurait été fidèlement implémenté."));
 
 A(H("2.5. Enseignements des systèmes d'autorisation à connaissance nulle déployés", 2));
 A(P("Trois travaux récents encadrent directement notre conception."));
@@ -347,6 +364,21 @@ A(PR([
    "implémentation Groth16 sur BN254 compte " + e(zkat.contraintes) + " contraintes, soit " +
    "une taille quasi identique à la nôtre : elle constitue de ce fait notre point de " +
    "comparaison le plus rigoureux (Section 7.5).", {}],
+]));
+
+A(PR([
+  ["La résistance post-quantique devient un critère attendu. ", { bold: true }],
+  ["Radanliev et al. (2025) [20] proposent un cadre d'identité numérique conforme aux " +
+   "standards post-quantiques du NIST et relèvent qu'« aucun cadre d'identité déployé ne " +
+   "fournit simultanément la sécurité post-quantique, des garanties cryptographiques de " +
+   "confidentialité et une confiance décentralisée ». Leur trajectoire de migration prévoit " +
+   "une phase d'imposition stricte des primitives post-quantiques. Un point mérite toutefois " +
+   "d'être relevé, car il nuance la lecture habituelle : leur couche de signature emploie " +
+   "bien Kyber et Dilithium, mais leur couche de preuve à connaissance nulle reste instanciée " +
+   "en zk-SNARK Groth16. ZK-ACE, dont la motivation est explicitement post-quantique, fait le " +
+   "même choix. L'effort de migration s'est donc concentré sur les signatures et laisse le " +
+   "système de preuve comme dépendance classique résiduelle — une asymétrie que nous " +
+   "reprenons en discussion (Section 8.2).", {}],
 ]));
 
 A(H("2.6. Synthèse comparative des architectures décentralisées existantes", 2));
@@ -605,7 +637,8 @@ A(H("5.2. Méthode B — model-checking exhaustif avec ProB", 2));
 A(P("Les invariants sont traduits en machines B selon la Méthode B (Abrial, 1996) [1]. " +
     "Conformément à l'approche de conversion de code Solidity en modèle B décrite par Baba et " +
     "al. (2024) [2], chaque fonction du contrat devient une opération B et chaque variable " +
-    "d'état une variable de machine. Trois machines ont été soumises à ProB 1.16.1 : la " +
+    "d'état une variable de machine. Trois machines ont été soumises à ProB 1.16.1 " +
+    "(Leuschel et Butler, 2003) [19] : la " +
     "transcription de la spécification initiale, le modèle du contrat durci, et un modèle " +
     "dédié à la liaison d'audience. Cette dernière séparation garde chaque espace d'états " +
     "exhaustivement explorable, les deux fragments d'état étant disjoints."));
@@ -642,7 +675,8 @@ A(PR([
 
 A(H("5.3. Preuve sur le code Solidity — SMTChecker (moteur CHC, solveur z3)", 2));
 A(P("Le model-checking porte sur un modèle ; nous l'avons complété par une preuve conduite " +
-    "directement sur le code Solidity, au moyen du SMTChecker intégré à solc 0.8.28, avec le " +
+    "directement sur le code Solidity, au moyen du SMTChecker intégré à solc 0.8.28 " +
+    "(Alt et Reitwiessner, 2018) [18], avec le " +
     "moteur CHC (clauses de Horn contraintes) et le solveur z3 4.12.6. Le vérificateur " +
     "Groth16 y est abstrait par un oracle booléen non contraint : la preuve couvre donc les " +
     "deux issues possibles de la vérification cryptographique, ce qui est strictement plus " +
@@ -903,23 +937,24 @@ A(P("Enfin, la comparaison ne porte pas sur des services fonctionnellement ident
 A(H("7.5. Positionnement face à l'état de l'art 2025-2026", 2));
 A(Legende("Tableau 7 — Comparaison avec les travaux les plus proches"));
 A(Tableau(
-  ["Travail", "Système", "Outillage", "Contraintes", "Preuve", "Vérif.", "Taille", "Gas vérif."],
+  ["Travail", "Système (setup)", "Outillage", "Contraintes", "Preuve", "Vérif.", "Taille",
+   "Gas vérif."],
   [
     ...sota.travaux.map((t) => [
-      t.nom, t.systemeDePreuve.split(",")[0], t.outillage,
+      t.nom, t.setupDeConfiance, t.outillage,
       t.contraintes == null ? "n. r." : e(t.contraintes),
       ms(t.preuveMs), ms(t.verificationMs),
       ko(t.taillePreuveOctets) + (t.taillePreuveRapportee ? "" : "*"),
       t.gasVerification == null ? "n. r." : e(t.gasVerification),
     ]),
-    [{ t: "ZK-OAuthChain", b: true }, { t: "Groth16", b: true },
+    [{ t: "ZK-OAuthChain", b: true }, { t: "Groth16 — setup par circuit", b: true },
      { t: "JS / snarkjs (WASM)", b: true }, { t: e(zk.circuit.contraintes), b: true },
      { t: ms(T.preuveGroth16Seule.mediane), b: true },
      { t: ms(T.verificationHorsChaine.mediane), b: true },
      { t: ko(zk.tailles.preuveGroth16Octets), b: true },
      { t: e(G.verificationPreuveSeule.moyenne), b: true }],
   ],
-  [17, 11, 17, 11, 11, 11, 10, 12], ["l", "l", "l", "r", "r", "r", "r", "r"]));
+  [15, 16, 15, 10, 11, 10, 10, 13], ["l", "l", "l", "r", "r", "r", "r", "r"]));
 A(Note("n. r. : non rapporté par les auteurs. * : taille non rapportée, valeur structurelle " +
        "de Groth16 sur BN254. Les temps sont des médianes, mesurés hors-chaîne de part et " +
        "d'autre. Les matériels diffèrent — Apple M3 Pro pour zkAt et ZK-ACE — de même que les " +
@@ -939,7 +974,8 @@ A(PR([
   ["Le coût on-chain se situe dans la fourchette de l'état de l'art. ", { bold: true }],
   ["La vérification d'une preuve coûte ici " + e(G.verificationPreuveSeule.moyenne) +
    " gas, contre " + e(linkdid.gasVerification) + " pour LinkDID (zk-SNARK) et " +
-   e(stark.gasVerification) + " pour le cadre zk-STARK de Hui Yuan. L'ancrage des racines " +
+   e(stark.gasVerification) + " pour le cadre zk-STARK de Hui Yuan (2025) [17]. " +
+   "L'ancrage des racines " +
    "coûte " + e(zk.gasAncrageRacines) + " gas, contre " + e(stark.gasAncrageRacines) +
    " pour la mise à jour de l'accumulateur de révocation de ce même cadre. Ces trois " +
    "systèmes ne calculent pas la même chose, et l'écart entre eux n'est donc pas imputable à " +
@@ -981,14 +1017,47 @@ A(P("Dans l'architecture présentée, l'AS émet le jeton et calcule l'engagemen
     "porteur contribue au secret sans le révéler à l'émetteur ; c'est l'objet d'un travail " +
     "complémentaire."));
 
-A(H("8.2. Setup de confiance de Groth16", 2));
+A(H("8.2. Setup de confiance et horizon post-quantique", 2));
 A(P("Groth16 exige un setup de confiance propre au circuit. Les miroirs publics de la " +
     "cérémonie Hermez n'étant plus accessibles au moment de ces travaux, le prototype recourt " +
     "à une cérémonie locale à contributeur unique, ce qui est acceptable pour une validation " +
-    "de faisabilité mais ne l'est pas en production. Un déploiement réel exige une cérémonie " +
-    "multipartite, ou le passage à un schéma à setup universel tel que PLONK, vers lequel le " +
-    "circuit est directement transposable. Le choix de Groth16 reste néanmoins celui des " +
-    "travaux les plus récents du domaine, ZK-ACE et zkAt inclus."));
+    "de faisabilité mais ne l'est pas en production. Ce choix n'est pas isolé : les travaux " +
+    "les plus récents du domaine, ZK-ACE et zkAt inclus, retiennent également Groth16, pour " +
+    "les mêmes raisons de compacité et de coût de vérification."));
+A(PR([
+  ["Deux objections distinctes, une seule réponse possible. ", { bold: true }],
+  ["La première est le setup de confiance lui-même. La seconde, plus structurante, est que " +
+   "Groth16 repose sur des couplages sur courbe elliptique : il n'est pas résistant à un " +
+   "adversaire quantique. Or, comme la Section 2.5 le relève, les deux cadres récents dont la " +
+   "motivation est explicitement post-quantique — ZK-ACE et le passeport numérique de " +
+   "Radanliev et al. — migrent leurs signatures vers les primitives NIST tout en conservant " +
+   "un système de preuve classique. La propriété post-quantique annoncée au niveau du système " +
+   "s'arrête donc à la couche de preuve. Ce travail partage exactement cette limite, et nous " +
+   "la signalons plutôt que de la laisser implicite.", {}],
+]));
+A(P("Un schéma à setup universel tel que PLONK répondrait à la première objection, mais non à " +
+    "la seconde : il reste fondé sur des couplages. Les systèmes transparents de type zk-STARK " +
+    "répondent aux deux d'un même mouvement — aucun setup, et une sécurité plausiblement " +
+    "post-quantique, puisque leur solidité ne repose que sur des fonctions de hachage. ZK-ACE " +
+    "les désigne d'ailleurs explicitement comme l'option transparente et plausiblement " +
+    "post-quantique, et déclare sa propre construction agnostique au système de preuve."));
+A(P("La conception présentée ici admet la même agnosticité, et pour une raison précise : les " +
+    "cinq contraintes de la Section 3.3 ne sont que des évaluations de hachage ZK-friendly et " +
+    "des vérifications d'arbre. Aucune arithmétique de signature ni opération spécifique à un " +
+    "système de preuve n'est placée dans le circuit. Les invariants de la Section 5 portent " +
+    "sur l'état du contrat et abstraient le vérificateur par un oracle booléen : ils demeurent " +
+    "valides sous tout backend. Une migration vers un backend STARK ne toucherait donc ni la " +
+    "structure du circuit, ni les invariants, ni la liaison de contexte."));
+A(P("Cette migration a néanmoins un coût, et il est mesuré dans la littérature plutôt " +
+    "qu'hypothétique. Le cadre zk-STARK de Hui Yuan rapporte des preuves d'environ " +
+    ko(stark.taillePreuveOctets) + " — soit un facteur " +
+    e(stark.taillePreuveOctets / zk.tailles.preuveGroth16Octets) + " par rapport aux " +
+    zk.tailles.preuveGroth16Octets + " octets obtenus ici — et une vérification on-chain " +
+    "d'environ " + e(stark.gasVerification) + " gas, contre " +
+    e(G.verificationPreuveSeule.moyenne) + " gas dans notre implémentation. L'arbitrage est " +
+    "donc explicite : la transparence et la résistance post-quantique se paient en volume de " +
+    "données et en coût de vérification. Il n'est pas tranché ici, et relève du travail " +
+    "complémentaire mentionné en conclusion."));
 
 A(H("8.3. Portée de la vérification formelle", 2));
 A(P("Les invariants sont établis sur des modèles B à domaine fini et sur le code source " +
