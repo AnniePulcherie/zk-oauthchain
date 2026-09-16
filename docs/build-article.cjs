@@ -26,6 +26,9 @@ const n = (x, d = 2) =>
 const e = (x) => Number(x).toLocaleString("fr-FR", { maximumFractionDigits: 0 });
 const ms = (x) => x == null ? "n. r." : (x >= 1000 ? n(x / 1000, 2) + " s" : n(x) + " ms");
 const ko = (o) => o == null ? "n. r." : (o >= 1024 ? n(o / 1024, 0) + " Ko" : o + " o");
+/** Petits nombres en toutes lettres : un numeral en tete de proposition se lit mal. */
+const mot = (x) => ["zéro", "une", "deux", "trois", "quatre", "cinq", "six", "sept",
+                    "huit", "neuf", "dix"][x] ?? String(x);
 
 const FONT = "Cambria";
 const TABLE_W = 9070;
@@ -204,47 +207,61 @@ A(new Paragraph({
   })],
 }));
 
-// ---- Résumé
+// ---- Résumé (limite : 300 mots -- verifiee a la generation, voir plus bas)
+const resume = [
+  "OAuth 2.0, norme de la délégation d'autorisation, repose sur un serveur central qui " +
+  "constitue un point de défaillance unique ; la blockchain lève cette dépendance mais expose " +
+  "les métadonnées. ZK-OAuthChain concilie les deux au moyen de preuves à connaissance nulle ; " +
+  "cet article en démontre la faisabilité par une implémentation complète et son évaluation.",
+
+  "L'analyse récente de zkLogin établit que les vulnérabilités des systèmes d'autorisation à " +
+  "connaissance nulle déployés ne sont pas cryptographiques, mais découlent d'une liaison " +
+  "insuffisante entre émetteur, audience, sujet et partie utilisatrice. Nous en tirons la " +
+  "conséquence au niveau du protocole : l'engagement scelle le contexte d'autorisation complet, " +
+  "dont quatre composantes deviennent opposables au vérificateur, le sujet demeurant privé.",
+
+  "Le circuit Circom prouve conjointement cette liaison, le hachage d'engagement, " +
+  "l'appartenance de Merkle et la non-révocation, et publie un nullifieur anti-rejeu séparé " +
+  "par domaine. Il compile en " + e(zk.circuit.contraintes) + " contraintes et produit une " +
+  "preuve Groth16 de " + zk.tailles.preuveGroth16Octets + " octets, de taille constante.",
+
+  "__PIVOT__Quatre propriétés de sécurité sont définies par jeux d'adversaire, puis " +
+  "effectivement vérifiées. Le model-checking exhaustif du modèle B exhibe un contre-exemple " +
+  "sur la spécification initiale — un aliasing d'engagement laissant un détenteur porteur d'un " +
+  "jeton révoqué — puis établit les invariants sur la version durcie en explorant " +
+  e(durci.etatsAnalyses) + " états. Le SMTChecker de solc démontre " + mot(prouvees.length) +
+  " obligations sur le code Solidity.",
+
+  "Une autorisation coûte " + e(G.verificationPreuveSeule.moyenne) + " gas pour la " +
+  "vérification seule et " + e(G.autorisationComplete.moyenne) + " gas au total, " +
+  "indépendamment du nombre de jetons émis : entre les " + e(linkdid.gasVerification) +
+  " gas de LinkDID et les " + e(stark.gasVerification) + " d'un cadre zk-STARK. Le flux " +
+  "complet atteint " + n(T.latenceFluxLecture.moyenne / 1000, 2) + " s contre " +
+  n(O.fluxTotalIntrospection.moyenne, 1) + " ms pour OAuth 2.0, la génération de preuve en " +
+  "représentant " + n(partPreuve, 0) + " %. À taille de circuit quasi identique, la " +
+  "comparaison avec zkAt situe cet écart dans l'outillage de preuve plutôt que dans la " +
+  "conception du protocole.",
+];
+
+// Garde-fou : la limite de 300 mots est une contrainte editoriale. On compte de la maniere
+// la plus stricte -- chaque groupe de chiffres separe compte pour un mot -- afin de rester
+// conforme quel que soit le compteur employe par la revue.
+const motsResume = resume.join(" ").replace("__PIVOT__", "").split(/\s+/).filter(Boolean).length;
+if (motsResume > 300) {
+  throw new Error(`Résumé : ${motsResume} mots, limite 300. Resserrer avant publication.`);
+}
+console.log(`Résumé : ${motsResume} mots (limite 300).`);
+
 A(H("Résumé", 1));
-A(P("Le protocole OAuth 2.0 constitue la norme principale de délégation d'autorisation dans " +
-    "les systèmes connectés. Son architecture centralisée engendre cependant un point de " +
-    "défaillance unique (Single Point of Failure, SPOF), une faible résilience et une " +
-    "dépendance à un serveur d'autorisation central. La blockchain apporte décentralisation " +
-    "et traçabilité, mais au prix d'une transparence qui compromet la confidentialité."));
-A(P("Cet article propose ZK-OAuthChain, une architecture hybride fusionnant OAuth 2.0, la " +
-    "blockchain et les preuves à connaissance nulle (Zero-Knowledge Proofs, ZKP), et en " +
-    "démontre la faisabilité technique par une implémentation complète et son évaluation " +
-    "expérimentale. L'analyse récente de zkLogin (Celi et al., 2026) établit que les " +
-    "vulnérabilités des systèmes d'autorisation à connaissance nulle déployés ne sont pas " +
-    "cryptographiques, mais découlent d'une liaison insuffisante entre émetteur, audience, " +
-    "sujet et partie utilisatrice. Nous en tirons la conséquence au niveau du protocole : " +
-    "l'engagement scelle le contexte d'autorisation complet, et quatre de ses composantes " +
-    "sont rendues opposables au vérificateur."));
-A(P("Le circuit, écrit en Circom, prouve conjointement la liaison de contexte, le hachage " +
-    "d'engagement, l'appartenance à un arbre de Merkle et la non-révocation, et publie un " +
-    "nullifieur anti-rejeu séparé par domaine. Il compile en " + e(zk.circuit.contraintes) +
-    " contraintes R1CS et produit une preuve Groth16 de " + zk.tailles.preuveGroth16Octets +
-    " octets, de taille constante."));
-A(PR([
-  ["Quatre propriétés de sécurité sont définies par jeux d'adversaire, puis ", {}],
-  ["effectivement vérifiées", { bold: true }],
-  [". Le model-checking exhaustif du modèle B (ProB) exhibe un contre-exemple sur la version " +
-   "naïve du contrat — un aliasing d'engagement qui permet à un détenteur de conserver un " +
-   "jeton révoqué — puis établit les invariants sur la version durcie en explorant " +
-   e(durci.etatsAnalyses) + " états et " + e(durci.transitionsFranchies) + " transitions. Le " +
-   "SMTChecker de solc (moteur CHC, solveur z3) démontre " + prouvees.length +
-   " obligations de preuve directement sur le code Solidity.", {}],
-]));
-A(P("La vérification on-chain d'une autorisation coûte " + e(G.verificationPreuveSeule.moyenne) +
-    " gas pour la seule preuve et " + e(G.autorisationComplete.moyenne) +
-    " gas pour l'autorisation complète, indépendamment du nombre de jetons émis — un coût qui " +
-    "se situe entre les " + e(linkdid.gasVerification) + " gas rapportés pour LinkDID " +
-    "(zk-SNARK) et les " + e(stark.gasVerification) + " gas d'un cadre zk-STARK comparable. " +
-    "La latence totale du flux atteint " + n(T.latenceFluxLecture.moyenne) + " ms contre " +
-    n(O.fluxTotalIntrospection.moyenne) + " ms pour un flux OAuth 2.0 classique ; la " +
-    "génération de preuve en représente " + n(partPreuve, 1) + " %. À taille de circuit " +
-    "quasi identique, la comparaison avec zkAt situe cet écart dans l'outillage de preuve " +
-    "plutôt que dans la conception du protocole."));
+for (const par of resume) {
+  if (par.startsWith("__PIVOT__")) {
+    // « effectivement vérifiées » porte l'argument central de l'article : mis en evidence.
+    const [avant, apres] = par.slice(9).split("effectivement vérifiées");
+    A(PR([[avant, {}], ["effectivement vérifiées", { bold: true }], [apres, {}]]));
+  } else {
+    A(P(par));
+  }
+}
 A(PR([["Mots-clés : ", { bold: true }],
       ["OAuth 2.0, blockchain, preuve à connaissance nulle, Groth16, liaison d'audience, " +
        "vérification formelle, Méthode B, contrat intelligent.", { italics: true }]]));
