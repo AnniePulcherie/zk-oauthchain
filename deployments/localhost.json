@@ -1,0 +1,34 @@
+{
+  "reseau": "localhost",
+  "chainId": 31337,
+  "horodatage": "2026-09-16T06:49:20.637Z",
+  "serveurAutorisation": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+  "emetteur": {
+    "nom": "as.zk-oauthchain.example",
+    "id": "7576352430705895020267087788729007914138826469336569394134879727177526421717"
+  },
+  "serveurRessource": {
+    "nom": "rs.api.banque.example",
+    "id": "10841775889421180023205503676384073012870579416916727949523389379418535745724",
+    "adresse": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "gasEnregistrement": "68086"
+  },
+  "separateurDomaine": "21769175819101396618764462753024203926443224785592303423247951128518444980001",
+  "contrats": {
+    "Groth16Verifier": {
+      "adresse": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "gasDeploiement": "486118",
+      "tx": "0xca25fa251acf894b7c3ab82f273271b97a0fc24609ffdc7b17f359e7df1ffc18"
+    },
+    "ZKAuthRegistry": {
+      "adresse": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "gasDeploiement": "912338",
+      "tx": "0xea7ea7206c09cde62b40bc370375b4c6e6902886e67c05c9f67ece8040cb6f3b"
+    },
+    "GasProbe": {
+      "adresse": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      "gasDeploiement": "213661",
+      "tx": "0xafa07e2401b0dd25514dda8f505880810da83904b18d6208f23487df245805e2"
+    }
+  }
+}

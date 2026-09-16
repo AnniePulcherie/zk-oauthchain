@@ -1,0 +1,78 @@
+========================================================================
+A. METHODE B (Abrial 1996) -- model-checking exhaustif ProB 1.16.1
+========================================================================
+
+--- formal/b/ZKAuthRegistry_v0.mch ---
+ALL OPERATIONS COVERED
+
+Model checking time: 610 ms (714 ms walltime)
+States analysed: 11
+Transitions fired: 128
+[31m*** COUNTER EXAMPLE FOUND ***[0m
+
+invariant_violation
+*** TRACE (length=4):
+ 1: INITIALISATION(commitments={},epoch=0,granted={},revoked={},used={})
+ 2: registerCommitment(u1,c1)
+ 3: registerCommitment(u3,c1)
+ 4: revokeCommitment(u3)
+*** Invariant 5 (Line:26 Col:4) is false (in state with id 67):
+ !u.(u : dom(commitments) => commitments(u) /: revoked)
+
+--- formal/b/ZKAuthRegistry.mch ---
+ALL OPERATIONS COVERED
+% Model checking finished, all open states visited
+Model checking time: 7000 ms (10281 ms walltime)
+States analysed: 8600
+Transitions fired: 48379
+[32mNo counter example found. ALL states visited.[0m
+
+--- formal/b/ZKAuthBinding.mch ---
+ALL OPERATIONS COVERED
+% Model checking finished, all open states visited
+Model checking time: 2406 ms (2844 ms walltime)
+States analysed: 1155
+Transitions fired: 2553
+[32mNo counter example found. ALL states visited.[0m
+
+========================================================================
+B. SMTCHECKER solc 0.8.28 -- moteur CHC (Horn clauses), solveur z3 4.12.6
+========================================================================
+
+--- formal/smtchecker/SpecSurete.sol ---
+Warning: CHC: Assertion violation might happen here.
+  --> formal/smtchecker/SpecSurete.sol:44:9:
+   |
+44 |         assert(commitmentOf[u] == 0 || holderOf[commitmentOf[u]] == u);
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Warning: CHC: Assertion violation might happen here.
+  --> formal/smtchecker/SpecSurete.sol:53:9:
+   |
+53 |         assert(commitmentOf[u] == 0 || !revoked[commitmentOf[u]]);
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Info: CHC: Assertion violation check is safe!
+  --> formal/smtchecker/SpecSurete.sol:60:9:
+   |
+60 |         assert(holderOf[c] == address(0) || !revoked[c]);
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+--- formal/smtchecker/SpecIntegrite.sol ---
+Info: CHC: Assertion violation check is safe!
+  --> formal/smtchecker/SpecIntegrite.sol:76:9:
+   |
+76 |         assert(grantedEpoch[n] == 0 || nullifierUsed[n]);
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Info: CHC: Assertion violation check is safe!
+  --> formal/smtchecker/SpecIntegrite.sol:81:9:
+   |
+81 |         assert(grantedEpoch[n] == 0 || epoch != 0);
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Info: CHC: Assertion violation check is safe!
+  --> formal/smtchecker/SpecIntegrite.sol:87:9:
+   |
+87 |         assert(grantedEpoch[n] == 0 || grantedRsId[n] != 0);
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

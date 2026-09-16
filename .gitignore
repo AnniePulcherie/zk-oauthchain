@@ -1,0 +1,19 @@
+# Dependances et artefacts de compilation
+node_modules/
+artifacts/
+cache/
+
+# Sorties volumineuses et regenerables : ptau (38 Mo), zkey (11 Mo), temoin wasm
+build/
+
+# Outils externes telecharges par `npm run bootstrap` (circom, ProB, JRE, solc, libz3)
+tools/
+
+# Secrets : ne jamais versionner
+.env
+
+# resultats/ et deployments/ SONT versionnes : ce sont les entrees de
+# docs/build-article.cjs, sans lesquelles l'article n'est pas reproductible.
+
+# Caches du parseur ProB (regeneres, contiennent des chemins absolus)
+formal/b/*.prob

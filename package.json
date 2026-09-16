@@ -1,0 +1,34 @@
+{
+  "name": "zk-oauthchain",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Prototype ZK-OAuthChain : autorisation decentralisee, confidentielle et formellement verifiee (OAuth 2.0 + Blockchain + ZKP)",
+  "license": "MIT",
+  "scripts": {
+    "bootstrap": "node scripts/bootstrap-tools.mjs",
+    "circuit:build": "node scripts/build-circuit.mjs",
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "node": "hardhat node",
+    "deploy:local": "node scripts/deploy.mjs localhost",
+    "deploy:sepolia": "node scripts/deploy.mjs sepolia",
+    "verify": "node formal/run-verification.mjs",
+    "bench:zk": "node bench/bench-zk.mjs localhost 30",
+    "bench:oauth": "node bench/bench-oauth.mjs 200",
+    "bench:compare": "node bench/compare.mjs",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "dependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "circomlib": "^2.0.5",
+    "circomlibjs": "^0.1.7",
+    "dotenv": "^16.6.1",
+    "ethers": "^6.17.0",
+    "express": "^4.22.3",
+    "hardhat": "^2.29.1",
+    "snarkjs": "^0.7.6"
+  },
+  "devDependencies": {
+    "docx": "^9.7.1"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "horodatage": "2026-09-16T07:11:18.358Z",
+  "methodeB": {
+    "modeleNaif": {
+      "machine": "formal/b/ZKAuthRegistry_v0.mch",
+      "attendu": "violation",
+      "violationTrouvee": true,
+      "espaceDEtatsCompletementVisite": false,
+      "etatsAnalyses": 11,
+      "transitionsFranchies": 128,
+      "tempsMs": 610,
+      "invariantViole": "!u.(u : dom(commitments) => commitments(u) /: revoked)",
+      "contreExemple": [
+        "INITIALISATION(commitments={},epoch=0,granted={},revoked={},used={})",
+        "registerCommitment(u1,c1)",
+        "registerCommitment(u3,c1)",
+        "revokeCommitment(u3)"
+      ],
+      "conforme": true
+    },
+    "modeleDurci": {
+      "machine": "formal/b/ZKAuthRegistry.mch",
+      "attendu": "sans-violation",
+      "violationTrouvee": false,
+      "espaceDEtatsCompletementVisite": true,
+      "etatsAnalyses": 8600,
+      "transitionsFranchies": 48379,
+      "tempsMs": 7000,
+      "invariantViole": null,
+      "contreExemple": null,
+      "conforme": true
+    },
+    "liaisonAudience": {
+      "machine": "formal/b/ZKAuthBinding.mch",
+      "attendu": "sans-violation",
+      "violationTrouvee": false,
+      "espaceDEtatsCompletementVisite": true,
+      "etatsAnalyses": 1155,
+      "transitionsFranchies": 2553,
+      "tempsMs": 2406,
+      "invariantViole": null,
+      "contreExemple": null,
+      "conforme": true
+    }
+  },
+  "smtChecker": {
+    "surete": {
+      "fichier": "formal/smtchecker/SpecSurete.sol",
+      "obligations": [
+        {
+          "assertion": "commitmentOf[u] == 0 || holderOf[commitmentOf[u]] == u",
+          "statut": "indetermine"
+        },
+        {
+          "assertion": "commitmentOf[u] == 0 || !revoked[commitmentOf[u]]",
+          "statut": "indetermine"
+        },
+        {
+          "assertion": "holderOf[c] == address(0) || !revoked[c]",
+          "statut": "prouve-sur"
+        }
+      ]
+    },
+    "integrite": {
+      "fichier": "formal/smtchecker/SpecIntegrite.sol",
+      "obligations": [
+        {
+          "assertion": "grantedEpoch[n] == 0 || nullifierUsed[n]",
+          "statut": "prouve-sur"
+        },
+        {
+          "assertion": "grantedEpoch[n] == 0 || epoch != 0",
+          "statut": "prouve-sur"
+        },
+        {
+          "assertion": "grantedEpoch[n] == 0 || grantedRsId[n] != 0",
+          "statut": "prouve-sur"
+        }
+      ]
+    }
+  }
+}

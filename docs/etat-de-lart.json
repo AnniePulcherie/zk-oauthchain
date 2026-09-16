@@ -1,0 +1,75 @@
+{
+  "_commentaire": [
+    "Chiffres extraits des publications de reference, avec leur provenance exacte.",
+    "Toute valeur non rapportee par les auteurs est marquee null et signalee comme telle :",
+    "aucune valeur n'est estimee ou extrapolee sans le dire.",
+    "Ces donnees alimentent le tableau comparatif de la Section 6 via bench/compare.mjs."
+  ],
+  "travaux": [
+    {
+      "cle": "zkAt",
+      "nom": "zkAt (Groth16)",
+      "reference": "Chalkias, Maram, Roy, Wang, Yadav -- Zero-Knowledge Authenticator for Blockchain, 2025",
+      "provenance": "Section 7.1 et Tableau 2",
+      "systemeDePreuve": "Groth16, courbe BN254",
+      "outillage": "Go / gnark (natif)",
+      "materiel": "Apple M3 Pro, moyenne sur 100 executions",
+      "contraintes": 24564,
+      "preuveMs": 50.97,
+      "verificationMs": 0.89,
+      "taillePreuveOctets": 256,
+      "taillePreuveRapportee": false,
+      "gasVerification": null,
+      "remarque": "Taille de preuve non rapportee par les auteurs : 256 o est la valeur structurelle de Groth16 sur BN254. Comparable a ce travail par la taille de circuit (24 564 vs 25 383 contraintes)."
+    },
+    {
+      "cle": "zkace",
+      "nom": "ZK-ACE (Groth16)",
+      "reference": "Wang -- ZK-ACE: Identity-Centric Zero-Knowledge Authorization for Post-Quantum Blockchain Systems, 2026",
+      "provenance": "Tableaux 1 et 4",
+      "systemeDePreuve": "Groth16, courbe BN254",
+      "outillage": "Rust / arkworks (natif, mono-fil)",
+      "materiel": "Apple M3 Pro, medianes Criterion.rs",
+      "contraintes": 4024,
+      "preuveMs": 63,
+      "verificationMs": 0.651,
+      "taillePreuveOctets": 256,
+      "taillePreuveRapportee": false,
+      "gasVerification": null,
+      "remarque": "Circuit 6,3 fois plus petit que celui de ce travail : pas d'appartenance Merkle ni de preuve d'exclusion. Cout on-chain non mesure (analyse structurelle de volumetrie uniquement)."
+    },
+    {
+      "cle": "stark",
+      "nom": "Cadre DID/VC (zk-STARK)",
+      "reference": "Hui Yuan -- A Scalable, Privacy-Preserving Decentralized Identity and Verifiable Data Sharing Framework based on Zero-Knowledge Proofs, 2025",
+      "provenance": "Section 6.2 et tableau comparatif Section 6.3",
+      "systemeDePreuve": "zk-STARK (sans setup de confiance)",
+      "outillage": "Cairo / chaine StarkWare",
+      "materiel": "non precise ; contrats deployes sur Sepolia",
+      "contraintes": null,
+      "preuveMs": 3500,
+      "verificationMs": 5,
+      "taillePreuveOctets": 46080,
+      "taillePreuveRapportee": true,
+      "gasVerification": 280000,
+      "gasAncrageRacines": 45000,
+      "remarque": "Les 45 000 gas frequemment cites correspondent a la mise a jour de l'accumulateur de revocation par l'emetteur, et non a la verification d'une preuve : le tableau comparatif des auteurs chiffre celle-ci a environ 280 000 gas."
+    },
+    {
+      "cle": "linkdid",
+      "nom": "LinkDID (zk-SNARK)",
+      "reference": "Cite comme reference SOTA par Hui Yuan, 2025",
+      "provenance": "Tableau comparatif Section 6.3",
+      "systemeDePreuve": "zk-SNARK",
+      "outillage": "non precise",
+      "materiel": "donnees publiques reprises par Hui Yuan",
+      "contraintes": null,
+      "preuveMs": 5000,
+      "verificationMs": 3,
+      "taillePreuveOctets": 1024,
+      "taillePreuveRapportee": true,
+      "gasVerification": 210000,
+      "remarque": "Taille de preuve rapportee comme inferieure a 1 Ko ; valeur portee a 1 024 o comme borne superieure."
+    }
+  ]
+}

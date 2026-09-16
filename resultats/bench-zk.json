@@ -1,0 +1,136 @@
+{
+  "horodatage": "2026-09-16T06:53:53.787Z",
+  "reseau": "localhost",
+  "chainId": 31337,
+  "iterations": 40,
+  "machine": {
+    "cpu": "13th Gen Intel(R) Core(TM) i5-13420H",
+    "coeurs": 12,
+    "memoireGo": 16.8,
+    "node": "v24.15.0",
+    "os": "Windows_NT 10.0.26200"
+  },
+  "circuit": {
+    "contraintes": 25383,
+    "variables": 25428,
+    "signauxPublics": 8,
+    "ptauPower": 15,
+    "tailleZkeyOctets": 11366370,
+    "tailleWasmOctets": 3083517
+  },
+  "tailles": {
+    "preuveGroth16Octets": 256,
+    "preuveSerialiseeJsonOctets": 723,
+    "signauxPublicsOctets": 256,
+    "calldataAutorisationOctets": 516
+  },
+  "gasDeploiement": {
+    "Groth16Verifier": 486118,
+    "ZKAuthRegistry": 912338,
+    "GasProbe": 213661
+  },
+  "gasAncrageRacines": 41321,
+  "temps": {
+    "emissionJetonAS": {
+      "n": 64,
+      "moyenne": 0.571,
+      "ecartType": 0.631,
+      "min": 0.318,
+      "mediane": 0.449,
+      "p95": 0.795,
+      "max": 5.211
+    },
+    "assemblageTemoin": {
+      "n": 40,
+      "moyenne": 47.174,
+      "ecartType": 5.176,
+      "min": 28.311,
+      "mediane": 46.32,
+      "p95": 54.562,
+      "max": 63.97
+    },
+    "generationPreuve": {
+      "n": 40,
+      "moyenne": 1749.331,
+      "ecartType": 264.674,
+      "min": 1512.985,
+      "mediane": 1652.871,
+      "p95": 2079.948,
+      "max": 2895.586
+    },
+    "calculTemoinWasm": {
+      "n": 40,
+      "moyenne": 130.159,
+      "ecartType": 21.03,
+      "min": 104.989,
+      "mediane": 121.969,
+      "p95": 172.497,
+      "max": 187.191
+    },
+    "preuveGroth16Seule": {
+      "n": 40,
+      "moyenne": 1619.172,
+      "ecartType": 256.919,
+      "min": 1399.254,
+      "mediane": 1531.936,
+      "p95": 1916.303,
+      "max": 2726.856
+    },
+    "verificationHorsChaine": {
+      "n": 40,
+      "moyenne": 38.217,
+      "ecartType": 28.27,
+      "min": 16.874,
+      "mediane": 26.963,
+      "p95": 100.292,
+      "max": 128.387
+    },
+    "verificationSurChaine": {
+      "n": 40,
+      "moyenne": 43.801,
+      "ecartType": 11.952,
+      "min": 27.733,
+      "mediane": 41.028,
+      "p95": 57.13,
+      "max": 105.788
+    },
+    "latenceFluxLecture": {
+      "n": 40,
+      "moyenne": 1840.307,
+      "ecartType": 271.245,
+      "min": 1601.135,
+      "mediane": 1738.224,
+      "p95": 2237.47,
+      "max": 3000.554
+    },
+    "latenceFluxEcriture": {
+      "n": 40,
+      "moyenne": 2045.864,
+      "ecartType": 276.168,
+      "min": 1781.664,
+      "mediane": 1951.797,
+      "p95": 2383.846,
+      "max": 3180.532
+    }
+  },
+  "gas": {
+    "verificationPreuveSeule": {
+      "n": 40,
+      "moyenne": 238785,
+      "ecartType": 0,
+      "min": 238785,
+      "mediane": 238785,
+      "p95": 238785,
+      "max": 238785
+    },
+    "autorisationComplete": {
+      "n": 40,
+      "moyenne": 348916.7,
+      "ecartType": 14.447,
+      "min": 348875,
+      "mediane": 348923,
+      "p95": 348935,
+      "max": 348935
+    }
+  }
+}

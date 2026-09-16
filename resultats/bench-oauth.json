@@ -1,0 +1,66 @@
+{
+  "horodatage": "2026-09-16T06:54:39.047Z",
+  "iterations": 200,
+  "machine": {
+    "cpu": "13th Gen Intel(R) Core(TM) i5-13420H",
+    "coeurs": 12,
+    "node": "v24.15.0"
+  },
+  "configuration": "AS et RS sur boucle locale (127.0.0.1), aucune latence reseau etendue",
+  "temps": {
+    "autorisation": {
+      "n": 200,
+      "moyenne": 0.738,
+      "ecartType": 0.489,
+      "min": 0.342,
+      "mediane": 0.596,
+      "p95": 1.318,
+      "max": 4.15
+    },
+    "echangeJeton": {
+      "n": 200,
+      "moyenne": 1.971,
+      "ecartType": 0.658,
+      "min": 1.178,
+      "mediane": 1.801,
+      "p95": 3.302,
+      "max": 4.809
+    },
+    "ressourceIntrospection": {
+      "n": 200,
+      "moyenne": 2.1,
+      "ecartType": 4.655,
+      "min": 0.798,
+      "mediane": 1.463,
+      "p95": 3.113,
+      "max": 48.372
+    },
+    "ressourceJwt": {
+      "n": 200,
+      "moyenne": 0.868,
+      "ecartType": 0.489,
+      "min": 0.435,
+      "mediane": 0.736,
+      "p95": 1.691,
+      "max": 4.423
+    },
+    "fluxTotalIntrospection": {
+      "n": 200,
+      "moyenne": 4.809,
+      "ecartType": 4.858,
+      "min": 2.351,
+      "mediane": 4.003,
+      "p95": 7.566,
+      "max": 50.962
+    },
+    "fluxTotalJwt": {
+      "n": 200,
+      "moyenne": 3.577,
+      "ecartType": 1.317,
+      "min": 2.011,
+      "mediane": 3.332,
+      "p95": 6.078,
+      "max": 10.812
+    }
+  }
+}
